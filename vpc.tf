@@ -1,9 +1,3 @@
-
-
-provider "aws" {
-  region = "us-east-2"
-}
-
 terraform {
   backend "s3" {
     bucket = "omnex-terraform-state-bucket"
