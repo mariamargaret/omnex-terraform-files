@@ -11,5 +11,5 @@ output "tgw-id" {
 }
 
 output "service_name" {
-  value = aws_vpc_endpoint_service.sec-gwlb_endpoint_service.service_name
+  value = var.gatewaylb.servicename
 }
