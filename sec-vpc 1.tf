@@ -21,10 +21,10 @@ resource "aws_subnet" "FW-MGMT-security" {
 
 
 # Creating NICs
-resource "aws_network_interface" "nics" {
+/*resource "aws_network_interface" "nics" {
   count     = length(var.subnets.subnet_cidr)
   subnet_id = aws_subnet.FW-MGMT-security[count.index].id
-}
+} */
 
 # Create an IGW for vpc
 
@@ -78,6 +78,19 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgwa" {
   tags = {
     Name = var.tgw.tgwattachmentname
   }
+}
+# fetching nic id from the subnet(tGW)
+data "aws_network_interfaces" "nic-tgw" {
+  filter {
+    name   = "subnet-id"
+    values = [aws_subnet.FW-MGMT-security[3].id]  # Ensure FW-MGMT-security is a list or map
+  }
+
+  # Ensure proper dependencies on the transit gateway
+  depends_on = [
+    aws_ec2_transit_gateway_vpc_attachment.tgwa,
+    aws_ec2_transit_gateway.sec-tgw
+  ]
 }
 
 # Create GW Load Balancer
